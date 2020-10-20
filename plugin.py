@@ -31,7 +31,7 @@ blueprint = Blueprint(package_name, package_name, url_prefix='/%s' %  package_na
 menu = {
     'main' : [package_name, 'EPG'],
     'sub' : [
-        ['setting', '설정'], ['log', '로그']
+        ['setting', u'설정'], ['log', u'로그']
     ], 
     'category' : 'tv'
 }  
@@ -41,7 +41,7 @@ plugin_info = {
     'name' : 'epk',
     'category_name' : 'tv',
     'developer' : 'soju6jan',
-    'description' : 'EPG 생성 플러그인',
+    'description' : u'EPG 생성 플러그인',
     'home' : 'https://github.com/soju6jan/epg',
     'more' : '',
 }

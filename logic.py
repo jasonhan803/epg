@@ -8,7 +8,6 @@ import time
 from datetime import datetime, timedelta
 import logging
 import urllib
-import urllib2
 import re
 import time
 from operator import itemgetter
@@ -68,7 +67,7 @@ class Logic(object):
                 Logic.scheduler_start()
             else:
                 Logic.one_execute()
-            from plugin import plugin_info
+            from .plugin import plugin_info
             Util.save_from_dict_to_json(plugin_info, os.path.join(os.path.dirname(__file__), 'info.json'))   
 
             # 리턴안되는 문제 발생
