@@ -87,7 +87,7 @@ class Logic(object):
     def scheduler_start():
         try:
             logger.debug('%s scheduler_start' % package_name)
-            job = Job(package_name, package_name, ModelSetting.get('interval'), Logic.scheduler_function, u"EPG 업데이트", False)
+            job = Job(package_name, package_name, ModelSetting.get('interval'), Logic.scheduler_function1, u"EPG 업데이트", False)
             scheduler.add_job_instance(job) 
         except Exception as e: 
             logger.error('Exception:%s', e)
@@ -104,7 +104,7 @@ class Logic(object):
             logger.error(traceback.format_exc())
 
     @staticmethod
-    def scheduler_function():
+    def scheduler_function1():
         try:
             logger.debug('EPG logic.py scheduler_function')
             LogicNormal.scheduler_function()
