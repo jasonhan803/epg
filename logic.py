@@ -106,6 +106,7 @@ class Logic(object):
     @staticmethod
     def scheduler_function():
         try:
+            logger.debug('EPG logic.py scheduler_function')
             LogicNormal.scheduler_function()
         except Exception as e:
             logger.error('Exception:%s', e)
