@@ -67,6 +67,7 @@ class Logic(object):
                 Logic.scheduler_start()
             else:
                 Logic.one_execute()
+                pass
             from .plugin import plugin_info
             Util.save_from_dict_to_json(plugin_info, os.path.join(os.path.dirname(__file__), 'info.json'))   
 
@@ -87,7 +88,7 @@ class Logic(object):
     def scheduler_start():
         try:
             logger.debug('%s scheduler_start' % package_name)
-            job = Job(package_name, package_name, ModelSetting.get('interval'), Logic.scheduler_function1, u"EPG 업데이트", False)
+            job = Job(package_name, package_name, ModelSetting.get('interval'), Logic.scheduler_function, u"EPG 업데이트", False)
             scheduler.add_job_instance(job) 
         except Exception as e: 
             logger.error('Exception:%s', e)
@@ -104,9 +105,8 @@ class Logic(object):
             logger.error(traceback.format_exc())
 
     @staticmethod
-    def scheduler_function1():
+    def scheduler_function():
         try:
-            logger.debug('EPG logic.py scheduler_function')
             LogicNormal.scheduler_function()
         except Exception as e:
             logger.error('Exception:%s', e)
@@ -135,7 +135,9 @@ class Logic(object):
                 def func():
                     time.sleep(2)
                     Logic.scheduler_function()
-                threading.Thread(target=func, args=()).start()
+                t = threading.Thread(target=func, args=())
+                t.daemon = True
+                t.start()
                 ret = 'thread'
         except Exception as e: 
             logger.error('Exception:%s', e)
