@@ -93,7 +93,10 @@ class LogicNormal(object):
                             data = {'type':'warning', 'msg' : u'%s EPG 생성이 실패하였습니다.<br>%s' % (call_from, result)}
                             socketio.emit("notify", data, namespace='/framework', broadcast=True)   
                 t = threading.Thread(target=thread_function, args=())
+                t.daemon = True
                 t.start()
+                # 2020-10-21
+                t.join()
             else:
                 LogicNormal.make_xml_task(call_from)
             return True
