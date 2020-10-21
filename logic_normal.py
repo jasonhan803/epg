@@ -35,6 +35,7 @@ class LogicNormal(object):
     @staticmethod
     def scheduler_function():
         try:
+            logger.debug('scheduler_function...')
             from framework.common.util import SJVASupportControl
             ret = SJVASupportControl.epg_refresh()
             logger.debug(ret)
