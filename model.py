@@ -274,10 +274,10 @@ class ModelEpgMakerChannel(db.Model):
             self.videoportal_name = d['site_info']['videoportal'][0]
             self.videoportal_id = d['site_info']['videoportal'][1]
             site_count['videoportal'] += 1
-        if 'everyon' in d['site_info']:
-            self.everyon_name = d['site_info']['everyon'][0]
+        #if 'everyon' in d['site_info']:
+        #    self.everyon_name = d['site_info']['everyon'][0]
             self.everyon_id = d['site_info']['everyon'][1]
-            site_count['everyon'] += 1
+        #    site_count['everyon'] += 1
 
     def __repr__(self):
         return repr(self.as_dict())
@@ -291,7 +291,7 @@ class ModelEpgMakerChannel(db.Model):
 
     @staticmethod
     def save(data):
-        site_count = {"daum":0,"skb":0,"lgu":0,"kt":0,"wavve":0,"tving":0,"videoportal":0,"everyon":0}
+        site_count = {"daum":0,"skb":0,"lgu":0,"kt":0,"wavve":0,"tving":0,"videoportal":0}#,"everyon":0}
         try:
             data = data['list']
             for d in data:
