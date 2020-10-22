@@ -276,7 +276,7 @@ class ModelEpgMakerChannel(db.Model):
             site_count['videoportal'] += 1
         #if 'everyon' in d['site_info']:
         #    self.everyon_name = d['site_info']['everyon'][0]
-            self.everyon_id = d['site_info']['everyon'][1]
+            #self.everyon_id = d['site_info']['everyon'][1]
         #    site_count['everyon'] += 1
 
     def __repr__(self):
