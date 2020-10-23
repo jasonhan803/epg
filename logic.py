@@ -42,7 +42,7 @@ class Logic(object):
         'updated_klive' : 'No File',
         'updated_hdhomerun' : 'No File',
         'updated_all' : '',
-
+        
         #'updated_klive_lc' : '',
         #'updated_plex_lc' : '',
     }

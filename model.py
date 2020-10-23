@@ -129,14 +129,18 @@ class ModelEpgMakerSetting(db.Model):
     def as_dict(self):
         return {x.name: getattr(self, x.name) for x in self.__table__.columns}
 
+   
     @staticmethod
     def get(key):
         try:
-            return db.session.query(ModelEpgMakerSetting).filter_by(key=key).first().value.strip()
-        except Exception as e:
-            logger.error('Exception:%s %s', e, key)
-            logger.error(traceback.format_exc())
-            
+            ret = db.session.query(ModelEpgMakerSetting).filter_by(key=key).first()
+            if ret is not None:
+                return ret.value.strip()
+            else:
+                return ''
+        except Exception as exception:
+            logger.error('Exception:%s %s', exception, key)
+            logger.error(traceback.format_exc())      
     
     @staticmethod
     def get_int(key):
