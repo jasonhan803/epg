@@ -213,13 +213,13 @@ class LogicNormal(object):
                     display_name_tag.text = str(klive_channel.number)
 
                 for klive_channel in klive_channel_list:
-                    logger.debug('klive_channel.epg_name :%s', klive_channel.epg_name)
+                    #logger.debug('klive_channel.epg_name :%s', klive_channel.epg_name)
                     epg_entity = ModelEpgMakerChannel.get_instance_by_name(klive_channel.epg_name)
-                    logger.debug('epg_entity : %s', epg_entity)
+                    #logger.debug('epg_entity : %s', epg_entity)
                     if epg_entity is None:
                         tmp = ModelEpgMakerChannel.get_match_name(klive_channel.title)
-                        logger.debug(tmp[0])
-                        logger.debug('klive_channel.title : %s', klive_channel.title)
+                        #logger.debug(tmp[0])
+                        #logger.debug('klive_channel.title : %s', klive_channel.title)
                         if tmp is not None :
                             
                             epg_entity = ModelEpgMakerChannel.get_instance_by_name(tmp[0])
