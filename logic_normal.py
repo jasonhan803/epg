@@ -308,81 +308,105 @@ class LogicNormal(object):
    
     @staticmethod
     def make_channel(root, channel_instance, channel_id, category=None):
-        try:
-            logger.debug('CH : %s', channel_instance.name)
-            for program in channel_instance.programs:
-                program_tag = ET.SubElement(root, 'programme')
-                program_tag.set('start', program.start_time.strftime('%Y%m%d%H%M%S') + ' +0900')
-                program_tag.set('stop', program.end_time.strftime('%Y%m%d%H%M%S') + ' +0900')
-                program_tag.set('channel', '%s' % channel_id)
-                title_tag = ET.SubElement(program_tag, 'title')
-                title_tag.set('lang', 'ko')
-                if program.re is not None and program.re:
-                    title_tag.text = program.title + ' (재)'
-                else:
-                    title_tag.text = program.title
-                if program.daum_info is not None:
-                    if program.daum_info.poster is not None:
-                        icon_tag = ET.SubElement(program_tag, 'icon')
-                        icon_tag.set('src', program.daum_info.poster)
-                    if program.daum_info.desc is not None:
-                        desc_tag = ET.SubElement(program_tag, 'desc')
-                        desc_tag.set('lang', 'ko')
-                        desc_tag.text = program.daum_info.desc
-                    if program.daum_info.actor is not None:
-                        credits_tag = ET.SubElement(program_tag, 'credits')
-                        for actor in program.daum_info.actor.split('|'):
-                            try:
-                                actor_tag = ET.SubElement(credits_tag, 'actor')
-                                #logger.debug(actor)
-                                name, role = actor.split(',')
-                                actor_tag.set('role', role.strip())
-                                actor_tag.text = name.strip()
-                            except:
-                                pass
-                else:
-                    if program.poster is not None:
-                        icon_tag = ET.SubElement(program_tag, 'icon')
-                        icon_tag.set('src', program.poster)
-                    if program.desc is not None:
-                        desc_tag = ET.SubElement(program_tag, 'desc')
-                        desc_tag.set('lang', 'ko')
-                        desc_tag.text = program.desc
-                    if program.actor is not None:
-                        credits_tag = ET.SubElement(program_tag, 'credits')
-                        for actor in program.actor.split('|'):
-                            try:
-                                actor_tag = ET.SubElement(credits_tag, 'actor')
-                                #logger.debug(actor)
-                                name, role = actor.split(',')
-                                actor_tag.set('role', role.strip())
-                                actor_tag.text = name.strip()
-                            except:
-                                pass
+        logger.debug('CH : %s', channel_instance.name)
+            
+        for program in channel_instance.programs:
 
-                category_tag = ET.SubElement(program_tag, 'category')
-                category_tag.set('lang', 'ko')
-                category_tag.text = category if category is not None else channel_instance.category
-                # TODO 영화부터 분기, 영화가 아니라면 모두 에피소드 처리해야함
-                if not program.is_movie:
-                    if program.episode_number is not None:
-                        episode_num_tag = ET.SubElement(program_tag, 'episode-num')
-                        episode_num_tag.set('system', 'onscreen')
-                        episode_num_tag.text = program.episode_number
-                        episode_num_tag = ET.SubElement(program_tag, 'episode-num')
-                        episode_num_tag.set('system', 'xmltv_ns')
-                        episode_num_tag.text = '0.%s.' % (int(program.episode_number.split('-')[0]) - 1)
+            try:
+                    
+                    tmp_title = ""
+                    tmparr = program.title.split(" ")
+                    tmp_i = 1
+                    for tmptitle in tmparr:
+
+                        if tmp_i < len(tmparr):
+                            tmp_title += tmptitle
+                            tmp_title += " "
+                            tmp_i += 1
+                        else:
+                            if tmptitle.find("회") == -1:
+                                tmp_title += tmptitle
+                            else:
+                                tmp_title = tmp_title[:-1]
+                                program.episode_number = tmptitle.replace("회", "")
+                    program.title = tmp_title
+                    
+                    program_tag = ET.SubElement(root, 'programme')
+                    program_tag.set('start', program.start_time.strftime('%Y%m%d%H%M%S') + ' +0900')
+                    program_tag.set('stop', program.end_time.strftime('%Y%m%d%H%M%S') + ' +0900')
+                    program_tag.set('channel', '%s' % channel_id)
+                    title_tag = ET.SubElement(program_tag, 'title')
+                    title_tag.set('lang', 'ko')
+                    if program.re is not None and program.re:
+                        title_tag.text = program.title + ' (재)'
                     else:
-                        episode_num_tag = ET.SubElement(program_tag, 'episode-num')
-                        episode_num_tag.set('system', 'onscreen')
-                        tmp = program.start_time.strftime('%Y%m%d')
-                        episode_num_tag.text = tmp
-                        episode_num_tag = ET.SubElement(program_tag, 'episode-num')
-                        episode_num_tag.set('system', 'xmltv_ns')
-                        episode_num_tag.text = '%s.%s.' % (int(tmp[:4])-1, int(tmp[4:]) - 1)
-        except Exception as e: 
-            logger.error('Exception:%s', e)
-            logger.error(traceback.format_exc())
+                        title_tag.text = program.title
+                    if program.daum_info is not None:
+                        if program.daum_info.poster is not None:
+                            icon_tag = ET.SubElement(program_tag, 'icon')
+                            icon_tag.set('src', program.daum_info.poster)
+                        if program.daum_info.desc is not None:
+                            desc_tag = ET.SubElement(program_tag, 'desc')
+                            desc_tag.set('lang', 'ko')
+                            desc_tag.text = program.daum_info.desc
+                        if program.daum_info.actor is not None:
+                            credits_tag = ET.SubElement(program_tag, 'credits')
+                            for actor in program.daum_info.actor.split('|'):
+                                try:
+                                    actor_tag = ET.SubElement(credits_tag, 'actor')
+                                    #logger.debug(actor)
+                                    name, role = actor.split(',')
+                                    actor_tag.set('role', role.strip())
+                                    actor_tag.text = name.strip()
+                                except:
+                                    pass
+                    else:
+                        if program.poster is not None:
+                            icon_tag = ET.SubElement(program_tag, 'icon')
+                            icon_tag.set('src', program.poster)
+                        if program.desc is not None:
+                            desc_tag = ET.SubElement(program_tag, 'desc')
+                            desc_tag.set('lang', 'ko')
+                            desc_tag.text = program.desc
+                        if program.actor is not None:
+                            credits_tag = ET.SubElement(program_tag, 'credits')
+                            for actor in program.actor.split('|'):
+                                try:
+                                    actor_tag = ET.SubElement(credits_tag, 'actor')
+                                    #logger.debug(actor)
+                                    name, role = actor.split(',')
+                                    actor_tag.set('role', role.strip())
+                                    actor_tag.text = name.strip()
+                                except:
+                                    pass
+
+                    category_tag = ET.SubElement(program_tag, 'category')
+                    category_tag.set('lang', 'ko')
+                    category_tag.text = category if category is not None else channel_instance.category
+                    # TODO 영화부터 분기, 영화가 아니라면 모두 에피소드 처리해야함
+                    if not program.is_movie:
+                        if program.episode_number is not None:
+                            episode_num_tag = ET.SubElement(program_tag, 'episode-num')
+                            episode_num_tag.set('system', 'onscreen')
+                            episode_num_tag.text = program.episode_number
+                            episode_num_tag = ET.SubElement(program_tag, 'episode-num')
+                            episode_num_tag.set('system', 'xmltv_ns')
+                            try:
+                                episode_num_tag.text = '0.%s.' % (int(program.episode_number.split('-')[0]) - 1)
+                            except Exception as e: 
+                                logger.error('Exception:%s', e)
+                                #logger.error(traceback.format_exc())
+                        # else:
+                        #     episode_num_tag = ET.SubElement(program_tag, 'episode-num')
+                        #     episode_num_tag.set('system', 'onscreen')
+                        #     tmp = program.start_time.strftime('%Y%m%d')
+                        #     episode_num_tag.text = tmp
+                        #     episode_num_tag = ET.SubElement(program_tag, 'episode-num')
+                        #     episode_num_tag.set('system', 'xmltv_ns')
+                        #     episode_num_tag.text = '%s.%s.' % (int(tmp[:4])-1, int(tmp[4:]) - 1)
+            except Exception as e: 
+                logger.error('Exception:%s', e)
+                #logger.error(traceback.format_exc())
 
 
     
