@@ -391,12 +391,7 @@ class LogicNormal(object):
                             episode_num_tag.text = program.episode_number
                             episode_num_tag = ET.SubElement(program_tag, 'episode-num')
                             episode_num_tag.set('system', 'xmltv_ns')
-                            try:
-                                episode_num_tag.text = '0.%s.' % (int(program.episode_number.split('-')[0]) - 1)
-                            except Exception as e:
-                                tmp = program.start_time.strftime('%Y%m%d')
-                                episode_num_tag.text = '%s.%s.' % (int(tmp[:4])-1, int(tmp[4:]) - 1)
-                                #logger.error(traceback.format_exc())
+                            episode_num_tag.text = '0.%s.' % (int(program.episode_number.split('-')[0]) - 1)
                         # else:
                         #     episode_num_tag = ET.SubElement(program_tag, 'episode-num')
                         #     episode_num_tag.set('system', 'onscreen')
