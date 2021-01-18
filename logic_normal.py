@@ -309,28 +309,9 @@ class LogicNormal(object):
     @staticmethod
     def make_channel(root, channel_instance, channel_id, category=None):
         logger.debug('CH : %s', channel_instance.name)
-            
         for program in channel_instance.programs:
 
             try:
-                    
-                    tmp_title = ""
-                    tmparr = program.title.split(" ")
-                    tmp_i = 1
-                    for tmptitle in tmparr:
-
-                        if tmp_i < len(tmparr):
-                            tmp_title += tmptitle
-                            tmp_title += " "
-                            tmp_i += 1
-                        else:
-                            if tmptitle.find("회") == -1:
-                                tmp_title += tmptitle
-                            else:
-                                tmp_title = tmp_title[:-1]
-                                program.episode_number = tmptitle.replace("회", "")
-                    program.title = tmp_title
-                    
                     program_tag = ET.SubElement(root, 'programme')
                     program_tag.set('start', program.start_time.strftime('%Y%m%d%H%M%S') + ' +0900')
                     program_tag.set('stop', program.end_time.strftime('%Y%m%d%H%M%S') + ' +0900')
@@ -392,17 +373,17 @@ class LogicNormal(object):
                             episode_num_tag = ET.SubElement(program_tag, 'episode-num')
                             episode_num_tag.set('system', 'xmltv_ns')
                             episode_num_tag.text = '0.%s.' % (int(program.episode_number.split('-')[0]) - 1)
-                        # else:
-                        #     episode_num_tag = ET.SubElement(program_tag, 'episode-num')
-                        #     episode_num_tag.set('system', 'onscreen')
-                        #     tmp = program.start_time.strftime('%Y%m%d')
-                        #     episode_num_tag.text = tmp
-                        #     episode_num_tag = ET.SubElement(program_tag, 'episode-num')
-                        #     episode_num_tag.set('system', 'xmltv_ns')
-                        #     episode_num_tag.text = '%s.%s.' % (int(tmp[:4])-1, int(tmp[4:]) - 1)
+                        else:
+                            episode_num_tag = ET.SubElement(program_tag, 'episode-num')
+                            episode_num_tag.set('system', 'onscreen')
+                            tmp = program.start_time.strftime('%Y%m%d')
+                            episode_num_tag.text = tmp
+                            episode_num_tag = ET.SubElement(program_tag, 'episode-num')
+                            episode_num_tag.set('system', 'xmltv_ns')
+                            episode_num_tag.text = '%s.%s.' % (int(tmp[:4])-1, int(tmp[4:]) - 1)
             except Exception as e: 
                 logger.error('Exception:%s', e)
-                #logger.error(traceback.format_exc())
+                logger.error(traceback.format_exc())
 
 
     
